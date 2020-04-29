@@ -3,6 +3,9 @@ Documentation for API REST endpoints:
 Base path: localhost:8080/api
 
 
+ENTITY Trip
+-----------
+
 1) GET /trips - return JSON array of all trips where:
              ?minPrice=N ... price is >= N
              &maxPrice=M ... price is <= M
@@ -38,57 +41,61 @@ Base path: localhost:8080/api
        otherwise,
 	       return 409 CONFLICT with JSON entity Trip with conflicting NAME.
 
-7) DELETE /trips/{id} - delete Trip where trip.getId = {id}, return 204 NO_CONTENT
+7) POST /trips/tags/{tripid} - add one tag for trip where tripId = trip.getId, if tag exists then existTag add to trip, else created new tag and add to trip
+
+8) POST /trips/country/{tripid} - add one country for trip where tripId = trip.getId, if country exists then existCountry add to trip, else created new Country and add to trip
+
+9) DELETE /trips/{id} - delete Trip where trip.getId = {id}, return 204 NO_CONTENT
+
+10) DELETE /trips/tags/{tripId}/{tagId} - delete one tag from trip where tripId = trip.getId and tagId = tag.getId, Tag is NOT DELETED from DB!
+
+11) DELETE /country/{tripId}/{countryId} - delete one country from trip where tripId = trip.getId and countryId = country.getId, Country is NOT DELETED from DB!
 
 
 Bulk operations (mostly for debugging):
 
-8) GET /trips/bulk - return JSON array of all Trips, unsorted
+12) GET /trips/bulk - return JSON array of all Trips, unsorted
 
-9) POST /trips/bulk - add all Trips from JSON array as with POST /trips
+13) POST /trips/bulk - add all Trips from JSON array as with POST /trips
 
-10) PUT /trips/bulk - replace all Trips in DB with Trips from JSON array
+14) PUT /trips/bulk - replace all Trips in DB with Trips from JSON array
        like DELETE /trips/bulk and POST /trips/bulk
 
-11) PATCH /trips/bulk - add or replace all Trips from JSON array,
+15) PATCH /trips/bulk - add or replace all Trips from JSON array,
        Trips with same NAME are replaced, new NAMEs are added.
 
-12) DELETE /trips/bulk - delete all Trips from DB
+16) DELETE /trips/bulk - delete all Trips from DB
 
-13) POST /tags/{tripid} - add one tag for trip where tripId = trip.getId, if tag exists then existTag add to trip, else created new tag and add to trip
 
-14) DELETE /tags/{tripId}/{tagId} - delete one tag from trip where tripId = trip.getId and tagId = tag.getId, Tag is NOT DELETED from DB!
-
-15) POST /country/{tripid} - add one country for trip where tripId = trip.getId, if country exists then existCountry add to trip, else created new Country and add to trip
-
-16) DELETE /country/{tripId}/{countryId} - delete one country from trip where tripId = trip.getId and countryId = country.getId, Country is NOT DELETED from DB!
-
-ENTITA TAG
+ENTITY Tag
+----------
 
 1) GET /tags - retrurn all tags
 
-2) POST /tags - add one Tag to db
+2) GET /tags/{name} - return one Tag where name = tag.name
 
-3) DELETE /tags/{tagId} - delete one tag where tagId = tag.getId
+3) POST /tags/addAll - add all Tags from JSON array
 
-4) GET /tags/{name} - return one Tag where name = tag.name
+4) POST /tags - add one Tag to db
 
-5) POST /tags/addAll - add all Tags from JSON array
+5) DELETE /tags/{tagId} - delete one tag where tagId = tag.getId
 
-ENTITA COUNTRY
+
+ENTITY Country
+--------------
 
 1) GET /countries - get all countries
 
 2) GET /countries/{name} - return Country where name = country.getName
 
-3) POST /countries/addAll - add all Countries from JSON array
+3) GET /countries/tripGet/{countryId} - retun all Trips from country where countryId = country.getId
 
-4) POST /countries - add one Country to db
+4) POST /countries/addAll - add all Countries from JSON array
 
-5) DELETE /countries/{id} - delete country where id = country.getId
+5) POST /countries - add one Country to db
 
-6) GET /countries/tripGet/{countryId} - retun all Trips from country where countryId = country.getId
+6) POST /countries/trip/{countryId} - add trip to country where countryId = country.getId
 
-7) POST /countries/trip/{countryId} - add trip to country where countryId = country.getId
+7) DELETE /countries/{id} - delete country where id = country.getId
 
 8) DELETE /countries/trip/{countryId}/{tripId} - delete trip from country where countryId = country.getId and tripId = trip.getId Trip is NOT DELETED from DB!
