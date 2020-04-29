@@ -56,7 +56,7 @@ public class TripCriteriaController {
 	ResponseEntity<TripCriteria> add(@RequestBody TripCriteria criteria) {
 		log.info("REST POST /criterias invoked");
 		criteriaService.add(criteria);
-		log.info("REST POST /criterias returned CREATED");
+		log.info(() -> "REST POST /criterias returned CREATED with id = " + criteria.getId());
 		return ResponseEntity
 				.created(URI.create("/api/criterias/" + criteria.getId()))
 				.body(criteria);
@@ -81,7 +81,7 @@ public class TripCriteriaController {
 	@ExceptionHandler(TripCriteriaNotFoundException.class)
 	void handleTripCriteriaNotFound(HttpServletResponse response, Exception exception)
 			throws IOException {
-		log.info(() -> "REST returned NOT_FOUND wuth error: " + exception.getMessage());
+		log.info(() -> "REST returned NOT_FOUND with error: " + exception.getMessage());
 		response.sendError(HttpStatus.NOT_FOUND.value());
 	}
 }

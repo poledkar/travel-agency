@@ -1,4 +1,5 @@
-Documentation for API REST endpoints:
+Documentation for API REST endpoints
+====================================
 
 Base path: localhost:8080/api
 
@@ -41,15 +42,21 @@ ENTITY Trip
        otherwise,
 	       return 409 CONFLICT with JSON entity Trip with conflicting NAME.
 
-7) POST /trips/tags/{tripid} - add one tag for trip where tripId = trip.getId, if tag exists then existTag add to trip, else created new tag and add to trip
+7) POST /trips/tags/{tripid} - add one Tag for Trip where tripId = trip.getId(),
+       if Tag exists then add it to Trip, else create new Tag and add it to Trip.
 
-8) POST /trips/country/{tripid} - add one country for trip where tripId = trip.getId, if country exists then existCountry add to trip, else created new Country and add to trip
+8) POST /trips/country/{tripid} - add one Country for Trip where tripId = trip.getId(),
+       if Country exists then add it to Trip, else create new Country and add it to Trip.
 
-9) DELETE /trips/{id} - delete Trip where trip.getId = {id}, return 204 NO_CONTENT
+9) DELETE /trips/{id} - delete Trip where id = trip.getId(), return 204 NO_CONTENT.
 
-10) DELETE /trips/tags/{tripId}/{tagId} - delete one tag from trip where tripId = trip.getId and tagId = tag.getId, Tag is NOT DELETED from DB!
+10) DELETE /trips/tags/{tripId}/{tagId} - remove one Tag from Trip
+       where tripId = trip.getId() and tagId = tag.getId(),
+       Tag remains in DB.
 
-11) DELETE /country/{tripId}/{countryId} - delete one country from trip where tripId = trip.getId and countryId = country.getId, Country is NOT DELETED from DB!
+11) DELETE /country/{tripId}/{countryId} - remove one Country from Trip
+       where tripId = trip.getId() and countryId = country.getId(),
+       Country remains in DB.
 
 
 Bulk operations (mostly for debugging):
@@ -70,32 +77,35 @@ Bulk operations (mostly for debugging):
 ENTITY Tag
 ----------
 
-1) GET /tags - retrurn all tags
+1) GET /tags - return all Tags
 
-2) GET /tags/{name} - return one Tag where name = tag.name
+2) GET /tags/{name} - return one Tag where name = Tag.getName()
 
 3) POST /tags/addAll - add all Tags from JSON array
 
-4) POST /tags - add one Tag to db
+4) POST /tags - add one Tag to DB
 
-5) DELETE /tags/{tagId} - delete one tag where tagId = tag.getId
+5) DELETE /tags/{tagId} - delete one Tag where tagId = Tag.getId()
 
 
 ENTITY Country
 --------------
 
-1) GET /countries - get all countries
+1) GET /countries - get all Countries
 
-2) GET /countries/{name} - return Country where name = country.getName
+2) GET /countries/{name} - return Country where name = Country.getName()
 
-3) GET /countries/tripGet/{countryId} - retun all Trips from country where countryId = country.getId
+3) GET /countries/tripGet/{countryId} - return all Trips from Country
+       where countryId = Country.getId()
 
 4) POST /countries/addAll - add all Countries from JSON array
 
-5) POST /countries - add one Country to db
+5) POST /countries - add one Country to DB
 
-6) POST /countries/trip/{countryId} - add trip to country where countryId = country.getId
+6) POST /countries/trip/{countryId} - add Trip to Country where countryId = Country.getId()
 
-7) DELETE /countries/{id} - delete country where id = country.getId
+7) DELETE /countries/{id} - delete Country where id = Country.getId()
 
-8) DELETE /countries/trip/{countryId}/{tripId} - delete trip from country where countryId = country.getId and tripId = trip.getId Trip is NOT DELETED from DB!
+8) DELETE /countries/trip/{countryId}/{tripId} - delete Trip from Country
+       where countryId = Country.getId() and tripId = Trip.getId(),
+       Trip remains in DB.
