@@ -3,6 +3,7 @@ package RSP.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -22,14 +23,38 @@ public class TripCriteriaService {
 
     private TripCriteriaDao criteriaDao;
     private TripService tripService;
+    private CountryService countryService;
+    private TagService tagService;
 
     @Autowired
-    public TripCriteriaService(TripCriteriaDao criteriaDao) {
+    public TripCriteriaService(
+            TripCriteriaDao criteriaDao,
+            TripService tripService,
+            CountryService countryService,
+            TagService tagService) {
         this.criteriaDao = criteriaDao;
+        this.tripService = tripService;
+        this.countryService = countryService;
+        this.tagService = tagService;
     }
 
     public void add(TripCriteria criteria) {
         Objects.requireNonNull(criteria, "trip criteria must not be null");
+
+        List<Country> countries = criteria.getCountries();
+        if (countries != null) {
+            criteria.setCountries(countries.stream()
+                    .map(country -> countryService.getByName(country.getName()))
+                    .collect(Collectors.toList()));
+        }
+
+        List<Tag> tags = criteria.getTags();
+        if (tags != null) {
+            criteria.setTags(tags.stream()
+                    .map(tag -> tagService.getByName(tag.getName()))
+                    .collect(Collectors.toList()));
+        }
+
         criteriaDao.add(criteria);
     }
 
