@@ -68,7 +68,8 @@ public class TripCriteriaController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<TripCriteria> add(@RequestBody TripCriteria criteria) {
+    ResponseEntity<TripCriteria> add(@RequestBody TripCriteria criteria)
+            throws InvalidQueryException, InconsistentQueryException {
         log.info("REST POST /criterias invoked");
         criteriaService.add(criteria);
         log.info("REST POST /criterias returned CREATED");

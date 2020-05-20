@@ -1,6 +1,7 @@
 package RSP.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -10,9 +11,11 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import RSP.dao.RecommendationDao;
 import RSP.dao.TripCriteriaDao;
 import RSP.dto.TripsQueryCriteria;
 import RSP.model.Country;
+import RSP.model.Recommendation;
 import RSP.model.Tag;
 import RSP.model.Trip;
 import RSP.model.TripCriteria;
@@ -25,20 +28,24 @@ public class TripCriteriaService {
     private TripService tripService;
     private CountryService countryService;
     private TagService tagService;
+    private RecommendationDao recommendationDao;
 
     @Autowired
     public TripCriteriaService(
             TripCriteriaDao criteriaDao,
             TripService tripService,
             CountryService countryService,
-            TagService tagService) {
+            TagService tagService,
+            RecommendationDao recommendationDao) {
         this.criteriaDao = criteriaDao;
         this.tripService = tripService;
         this.countryService = countryService;
         this.tagService = tagService;
+        this.recommendationDao = recommendationDao;
     }
 
-    public void add(TripCriteria criteria) {
+    public void add(TripCriteria criteria)
+            throws InvalidQueryException, InconsistentQueryException {
         Objects.requireNonNull(criteria, "trip criteria must not be null");
 
         List<Country> countries = criteria.getCountries();
@@ -56,6 +63,15 @@ public class TripCriteriaService {
         }
 
         criteriaDao.add(criteria);
+
+        for (Trip trip : tripService.getSome(translate(criteria))) {
+            Recommendation recommendation = new Recommendation();
+            recommendation.setCriteria(criteria);
+            recommendation.setTrip(trip);
+            recommendation.setDate(new Date());
+            recommendation.setDelivered(false);
+            recommendationDao.add(recommendation);
+        }
     }
 
     public TripCriteria get(int id) throws TripCriteriaNotFoundException {
@@ -85,6 +101,7 @@ public class TripCriteriaService {
             }
             result.setCountry(countryNames);
         }
+        result.setCountryAny(criteria.getAnyCountry() == Boolean.TRUE);
 
         List<Tag> tags = criteria.getTags();
         if (tags != null && !tags.isEmpty()) {
@@ -94,6 +111,7 @@ public class TripCriteriaService {
             }
             result.setTag(tagNames);
         }
+        result.setTagAny(criteria.getAnyTag() == Boolean.TRUE);
 
         result.setMinPrice(criteria.getMinPrice());
         result.setMaxPrice(criteria.getMaxPrice());
