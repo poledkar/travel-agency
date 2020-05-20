@@ -28,9 +28,9 @@ import RSP.service.TripCriteriaService;
 @RequestMapping("/api/criterias")
 public class TripCriteriaController {
 
-    private static final Logger log = Logger.getLogger(TripCriteriaController.class.getName());
-
     private final TripCriteriaService criteriaService;
+
+    private static final Logger log = Logger.getLogger(TripCriteriaController.class.getName());
 
     TripCriteriaController(TripCriteriaService criteriaService) {
         this.criteriaService = criteriaService;
@@ -81,7 +81,8 @@ public class TripCriteriaController {
     @ExceptionHandler(TripCriteriaNotFoundException.class)
     void handleTripCriteriaNotFound(HttpServletResponse response, Exception exception)
             throws IOException {
-        log.info(() -> "REST returned NOT_FOUND wuth error: " + exception.getMessage());
+        log.info(() ->
+                "REST /criterias... returned NOT_FOUND wuth error: " + exception.getMessage());
         response.sendError(HttpStatus.NOT_FOUND.value());
     }
 }
